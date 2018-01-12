@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jQuery.js"></script>
+    <style>
+        *{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .wrapper{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            width: 326px;
+            background-color: rgb(54, 133, 144);
+            border-radius: 6px;
+            padding-bottom: 18px;
+        }
+
+        .wrapper .head{
+            width: 326px;
+            height: 110px;
+            background: rgb(150,164,194);
+            border-radius: 6px;
+            text-align: center;
+            color: #fff;
+            font-size: 20px;
+            position: relative;
+            box-shadow: -1px 10px 20px -4px black;
+        }
+        .wrapper .head .result{
+            padding-top: 50px;
+            display: block;
+            word-wrap: break-word;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            overflow: hidden;
+            max-height: 50px; 
+        }
+        .wrapper .content .row{
+          margin: 0 19px;  
+        }
+        .wrapper .row button{
+            color: #fff;
+            margin: 3px;
+            width: 60px;
+            height: 45px;
+            background: rgb(43, 47, 91);
+            border-radius: 5px;
+            border-width: 0;
+            margin-top: 18px;
+        }
+        .wrapper .row .active{
+            background-image: none!important;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="head">
+            <p class="result"></p>
+        </div>
+        <div class="content">
+             <div class="row">
+                 <button>(</button>
+                 <button>)</button>
+                 <button>CE</button>
+                 <button>AC</button>
+             </div>
+             <div class="row">
+                 <button>7</button>
+                 <button>8</button>
+                 <button>9</button>
+                 <button>/</button>
+             </div>
+             <div class="row">
+                 <button>4</button>
+                 <button>5</button>
+                 <button>6</button>
+                 <button>x</button>
+             </div>
+             <div class="row">
+                 <button>1</button>
+                 <button>2</button>
+                 <button>3</button>
+                 <button>-</button>
+             </div>
+             <div class="row">
+                 <button>0</button>
+                 <button>.</button>
+                 <button>=</button>
+                 <button>+</button>
+             </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var btn = document.getElementsByTagName("button"),
+            i,
+            bLen = btn.length,
+            p = document.getElementsByClassName("result")[0];
+        for(i = 0; i < bLen; i++) {
+            if(!(btn[i].innerText < 10)) {
+                if(btn[i].innerText !== ".") {
+                    btn[i].style.background = "linear-gradient(to bottom, rgba(252,156,23,1) 0%, rgba(247,126,27,1) 100%)"
+                }
+            }
+        } 
+
+        var key = true;
+        $(btn).on({
+            mousedown : function (e) {
+                $(this).addClass("active");
+                // var thisText = $(this).text();
+                if(key) {
+                    (function (A) {
+                        addContent(A);
+                    }( $(this).text() ))
+                    
+                }else {
+                    $(p).text("");
+                    (function (A) {
+                        addContent(A);
+                    }( $(this).text() )) 
+                    key = true;
+                }   
+                    
+                
+                    
+            },
+            mouseup : function (e) {
+                $(this).removeClass("active");
+            }
+        })
+        
+
+
+        function addContent(A) {
+            var thisText = A;
+            if(thisText == "CE") {
+                var len = $(p).text().length,
+                    text = $(p).text().slice(0, len - 1);
+                $(p).text( text );
+            }else if(thisText == "AC") {
+                $(p).text("");
+            }else if(thisText == "x") {
+                $(p).text( $(p).text() + "*" );
+            }else if(thisText == "=") {
+                var text = $(p).text(),
+                    result = eval("(" + text +")");
+                $(p).text( result );
+                key = false;    
+            }else{
+                if(p.offsetHeight == 97) {
+                    $(p).text( $(p).text() + thisText );
+                    $(p).css("transform", "translateY(-10px)");
+                }else if(p.offsetHeight > 97) {
+                    alert("this string is too long");
+                    var len = $(p).text().length,
+                        text = $(p).text().slice(0, len - 1);
+                    $(p).text( text );    
+                    
+                }else {
+                    $(p).text ( $(p).text() + thisText );
+                }
+            }
+        }
+    </script>
+</body>
+</html>
